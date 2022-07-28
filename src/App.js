@@ -9,8 +9,8 @@ import ToDoList from './components/ToDoList/ToDoList';
 import { useDisclosure } from '@chakra-ui/react';
 
 function App() {
-  // Controll Input Modal
-  const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure();
+  // Control Input Modal
+  const { isOpen: isModalOpen, onOpen: onModalOpen, onClose } = useDisclosure();
 
   // Control formState
   const [formState, setFormState] = useState({
@@ -35,6 +35,17 @@ function App() {
     },
   ]);
 
+  const onModalClose = () => {
+    setFormState({
+      title: '',
+      deadline: new Date().toISOString().substring(0, 16),
+      status: 'Planned',
+      type: 'create',
+      index: null,
+    });
+    onClose();
+  };
+
   return (
     <div className='App'>
       <div className='page-wrapper'>
@@ -48,7 +59,12 @@ function App() {
             setFormState={setFormState}
           />
         )}
-        <ToDoList todos={todos} onModalOpen={onModalOpen} setFormState={setFormState} />
+        <ToDoList
+          todos={todos}
+          onClose={onModalClose}
+          onModalOpen={onModalOpen}
+          setFormState={setFormState}
+        />
       </div>
     </div>
   );
